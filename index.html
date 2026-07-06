@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Agentic AI Engineer Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B121A;
+    --panel: #17232F;
+    --panel-2: #1D2B39;
+    --line: #2A3947;
+    --text: #ECF0F3;
+    --muted: #8DA0B3;
+    --amber: #FFB454;
+    --teal: #5EEAD4;
+    --amber-dim: rgba(255,180,84,0.14);
+    --teal-dim: rgba(94,234,212,0.12);
+    --danger: #FF8A80;
+    --grey: #4A5A6A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(ellipse at top left, rgba(94,234,212,0.07), transparent 45%),
+      radial-gradient(ellipse at bottom right, rgba(255,180,84,0.06), transparent 45%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    min-height:100vh;
+    perspective: 1400px;
+  }
+  .mono{font-family:'JetBrains Mono', monospace;}
+  .display{font-family:'Space Grotesk', sans-serif;}
+  .grid-bg{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      linear-gradient(rgba(94,234,212,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(94,234,212,0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at 30% 0%, black 0%, transparent 70%);
+  }
+  header.hero{ position:relative; z-index:1; max-width:960px; margin:0 auto; padding: 90px 28px 70px; }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--teal); display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow::before{ content:''; width:8px; height:8px; border-radius:50%; background:var(--teal); box-shadow:0 0 10px var(--teal); }
+  h1.display{
+    font-size: clamp(2.1rem, 5vw, 3.4rem); font-weight:600; line-height:1.08; letter-spacing:-0.01em;
+    color:var(--text); max-width: 780px;
+    text-shadow: 0 2px 0 rgba(0,0,0,0.4), 0 8px 24px rgba(94,234,212,0.08);
+  }
+  h1 .accent{color:var(--amber);}
+  .hero-sub{ margin-top:22px; max-width:600px; color:var(--muted); font-size:1.05rem; }
+  .hero-meta{ margin-top:34px; display:flex; flex-wrap:wrap; gap:14px; }
+  .meta-chip{
+    font-family:'JetBrains Mono', monospace; font-size:12.5px;
+    border:1px solid var(--line); background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    padding:9px 15px; border-radius:8px; color:var(--muted);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.35), 0 8px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .meta-chip b{color:var(--text); font-weight:500;}
+  nav.rail{
+    position:sticky; top:0; z-index:5;
+    background:rgba(11,18,26,0.88); backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.rail .inner{
+    max-width:960px; margin:0 auto; padding:14px 28px;
+    display:flex; gap:22px; overflow-x:auto; scrollbar-width:none;
+  }
+  nav.rail .inner::-webkit-scrollbar{display:none;}
+  nav.rail a{
+    font-family:'JetBrains Mono', monospace; font-size:12px;
+    color:var(--muted); text-decoration:none; white-space:nowrap;
+    letter-spacing:0.03em; padding:6px 0; border-bottom:2px solid transparent;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  nav.rail a:hover{color:var(--teal); border-color:var(--teal);}
+  main{ position:relative; z-index:1; max-width:960px; margin:0 auto; padding: 20px 28px 60px; }
+  .track{ position:relative; padding-left: 46px; }
+  .track::before{
+    content:''; position:absolute; left:15px; top:10px; bottom:10px; width:2px;
+    background: linear-gradient(to bottom, var(--teal), var(--amber)); opacity:0.35;
+  }
+  .phase{ position:relative; margin-bottom:70px; scroll-margin-top:80px; transform-style:preserve-3d; }
+  .phase-node{
+    position:absolute; left:-46px; top:2px; width:34px; height:34px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #22323F, #101A22);
+    border:2px solid var(--grey); display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:500; color:var(--muted);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.45), inset 0 1px 1px rgba(255,255,255,0.06);
+    transition: border-color .2s ease, color .2s ease, box-shadow .2s ease;
+  }
+  .phase-node.status-progress{ border-color:var(--amber); color:var(--amber); box-shadow: 0 0 14px rgba(255,180,84,0.4), inset 0 1px 1px rgba(255,255,255,0.08);}
+  .phase-node.status-done{ border-color:var(--teal); color:var(--teal); box-shadow: 0 0 14px rgba(94,234,212,0.45), inset 0 1px 1px rgba(255,255,255,0.08);}
+  .phase-head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:12px; margin-bottom:6px; }
+  .phase-head h2{ font-family:'Space Grotesk', sans-serif; font-size:1.55rem; font-weight:600; }
+  .weeks-tag{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--amber);
+    border:1px solid rgba(255,180,84,0.35); background:var(--amber-dim); padding:3px 10px; border-radius:20px;
+  }
+  .phase-goal{ color:var(--muted); margin-bottom:18px; max-width:640px; font-size:0.98rem; }
+  .status-row{ display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+  .status-btn{
+    font-family:'JetBrains Mono', monospace; font-size:11.5px; letter-spacing:0.03em;
+    padding:8px 14px; border-radius:8px; cursor:pointer; color:var(--muted);
+    background: linear-gradient(180deg, var(--panel-2), var(--panel)); border:1px solid var(--line);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+    transition: transform .08s ease, box-shadow .08s ease, color .15s ease, border-color .15s ease;
+  }
+  .status-btn:active{ transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.35); }
+  .status-btn[data-active="true"][data-val="not-started"]{ color:var(--text); border-color:var(--grey); }
+  .status-btn[data-active="true"][data-val="in-progress"]{ color:var(--amber); border-color:var(--amber); box-shadow: 0 3px 0 rgba(0,0,0,0.35), 0 0 12px rgba(255,180,84,0.25), inset 0 1px 0 rgba(255,255,255,0.06); }
+  .status-btn[data-active="true"][data-val="done"]{ color:var(--teal); border-color:var(--teal); box-shadow: 0 3px 0 rgba(0,0,0,0.35), 0 0 12px rgba(94,234,212,0.28), inset 0 1px 0 rgba(255,255,255,0.06); }
+  .topic-list{ display:flex; flex-direction:column; gap:20px; margin-bottom:22px; }
+  .topic{
+    background: linear-gradient(160deg, var(--panel-2) 0%, var(--panel) 100%);
+    border:1px solid var(--line); border-radius:12px; padding:18px 20px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.32), 0 2px 0 rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03);
+    transform: translateZ(0); transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .topic:hover{ box-shadow: 0 16px 32px rgba(0,0,0,0.4), 0 2px 0 rgba(0,0,0,0.4); }
+  .topic-title{ font-weight:600; font-size:0.98rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+  .topic-title::before{ content:''; width:6px; height:6px; background:var(--teal); border-radius:1px; transform: rotate(45deg); flex-shrink:0; }
+  .topic-desc{ color:var(--muted); font-size:0.9rem; margin-bottom:10px; }
+  .qa-edge{
+    margin-top:10px; font-size:0.85rem; padding:10px 12px; background:var(--teal-dim);
+    border-left:2px solid var(--teal); border-radius:4px; color:#C7F5EC;
+  }
+  .qa-edge b{ color:var(--teal); font-family:'JetBrains Mono', monospace; font-size:0.78rem; letter-spacing:0.04em; }
+  .resources{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+  .resources a{
+    font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--text); text-decoration:none;
+    background:var(--panel); border:1px solid var(--line); padding:6px 10px; border-radius:6px;
+    display:inline-flex; align-items:center; gap:6px; transition: border-color .15s ease, color .15s ease;
+  }
+  .resources a:hover{ border-color:var(--amber); color:var(--amber); }
+  .resources a::after{ content:'↗'; font-size:10px; opacity:0.6; }
+  .checkpoint{
+    margin-top:22px; background: linear-gradient(135deg, rgba(255,180,84,0.1), rgba(94,234,212,0.06));
+    border:1px solid rgba(255,180,84,0.32); border-radius:12px; padding:20px 22px;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .checkpoint .label{ font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--amber); margin-bottom:8px; display:block; }
+  .checkpoint p{ font-size:0.94rem; color:var(--text); }
+  .quiz{
+    margin-top:16px; border-radius:14px; overflow:hidden; border:1px solid var(--line);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+  .quiz-head{
+    padding:14px 18px; background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    display:flex; align-items:center; justify-content:space-between; gap:10px; border-bottom:1px solid var(--line);
+  }
+  .quiz-head .label{ font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); }
+  .quiz-body{ padding:20px 20px 22px; background: var(--panel); max-height:640px; overflow-y:auto; }
+  .quiz-locked{ padding:26px 20px; text-align:center; background: var(--panel); }
+  .lock-icon{ font-size:20px; margin-bottom:8px; }
+  .quiz-locked p{ color:var(--muted); font-size:0.88rem; max-width:380px; margin:0 auto; }
+  .quiz-locked .sub{ font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--grey); margin-top:6px; }
+  .q-block{ margin-bottom:18px; }
+  .q-block:last-of-type{ margin-bottom:0; }
+  .q-text{ font-weight:600; font-size:0.9rem; margin-bottom:10px; }
+  .q-options{ display:flex; flex-direction:column; gap:7px; }
+  .q-option{
+    display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:8px; cursor:pointer;
+    background: var(--panel-2); border:1px solid var(--line); font-size:0.84rem; color:var(--text);
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .q-option:hover{ border-color:var(--teal); }
+  .q-option input{ accent-color: var(--teal); }
+  .q-option.correct{ border-color:var(--teal); background: var(--teal-dim); }
+  .q-option.incorrect{ border-color:var(--danger); background: rgba(255,138,128,0.1); }
+  .quiz-submit{
+    margin-top:8px; font-family:'JetBrains Mono', monospace; font-size:12px; padding:10px 18px; border-radius:8px; cursor:pointer;
+    background: linear-gradient(180deg, var(--teal), #37b8a3); color:#08211D; border:none; font-weight:600;
+    box-shadow: 0 4px 0 #2b8f7e, 0 10px 20px rgba(94,234,212,0.2); transition: transform .08s ease, box-shadow .08s ease;
+  }
+  .quiz-submit:active{ transform: translateY(3px); box-shadow: 0 1px 0 #2b8f7e; }
+  .quiz-retake{
+    margin-top:8px; margin-left:8px; font-family:'JetBrains Mono', monospace; font-size:12px; padding:10px 18px; border-radius:8px; cursor:pointer;
+    background: linear-gradient(180deg, var(--panel-2), var(--panel)); color:var(--muted); border:1px solid var(--line);
+  }
+  .quiz-result{ margin-top:14px; font-family:'JetBrains Mono', monospace; font-size:12.5px; color:var(--teal); display:none; }
+  footer{ position:relative; z-index:1; max-width:960px; margin:0 auto; padding:40px 28px 90px; border-top:1px solid var(--line); }
+  footer h3{ font-family:'Space Grotesk', sans-serif; font-size:1.15rem; margin-bottom:12px; }
+  footer p{ color:var(--muted); font-size:0.94rem; max-width:640px; }
+  .progress-wrap{ position:fixed; right:24px; bottom:24px; z-index:10; }
+  .progress-badge{
+    font-family:'JetBrains Mono', monospace; font-size:12px;
+    background: linear-gradient(180deg, var(--panel-2), var(--panel)); border:1px solid var(--line);
+    padding:11px 16px; border-radius:30px; color:var(--muted);
+    box-shadow:0 10px 26px rgba(0,0,0,0.45), 0 2px 0 rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .progress-badge b{ color:var(--teal); }
+  input[type="checkbox"]{ accent-color: var(--teal); width:15px; height:15px; margin-right:8px; vertical-align:middle; }
+  .check-label{ display:flex; align-items:flex-start; cursor:pointer; font-size:0.9rem; color:var(--muted); }
+  .check-label input{ margin-top:3px; }
+  .topic-badge{
+    font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--grey); border:1px solid var(--line); padding:2px 8px; border-radius:20px; margin-left:auto;
+  }
+  .topic-badge.done{ color:var(--teal); border-color:var(--teal); }
+  @media (max-width: 640px){
+    header.hero{ padding:60px 20px 40px; }
+    main{ padding:20px 16px 40px; }
+    .track{ padding-left:38px; }
+    .track::before{ left:12px; }
+    .phase-node{ left:-38px; width:26px; height:26px; font-size:11px; }
+    .progress-wrap{ right:14px; bottom:14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<header class="hero">
+  <div class="eyebrow">Zero → Job-Ready · 6 Month Path</div>
+  <h1 class="display">The Agentic AI Engineer <span class="accent">Roadmap</span></h1>
+  <p class="hero-sub">A step-by-step, fully dynamic curriculum for going from no technical background to building, evaluating, and shipping real autonomous AI agents — with free YouTube classes and a 30-question quiz for every topic. Your checkbox and status progress auto-saves.</p>
+  <div class="hero-meta">
+    <div class="meta-chip">Duration <b>24 weeks</b></div>
+    <div class="meta-chip">Pace <b>20–25 hrs/week</b></div>
+    <div class="meta-chip">Phases <b>05</b></div>
+    <div class="meta-chip">Cost <b>$0 required</b></div>
+  </div>
+</header>
+
+<nav class="rail"><div class="inner" id="navRail"></div></nav>
+
+<main><div class="track" id="track"></div></main>
+
+<footer>
+  <h3 class="display">Weekly rhythm</h3>
+  <p>60% hands-on building, 40% reading and watching. Ship something small every week — even rough — momentum matters more than polish early on.</p>
+</footer>
+
+<div class="progress-wrap">
+  <div class="progress-badge"><b id="doneCount">0</b>/<span id="totalCount">0</span> topics complete</div>
+</div>
+
+<script>
+/* ============ DATA: phases + topics + free YouTube resources ============ */
+const DATA = [
+  { id:1, title:"Foundations", weeks:"Weeks 1–4",
+    goal:"Get fluent in Python and the core concepts every later phase depends on.",
+    checkpoint:"Write a Python script that calls an LLM API and summarizes a block of text you feed it.",
+    topics:[
+      { key:"1-1", title:"Python programming",
+        desc:"Syntax, functions, classes, error handling, working with APIs (requests), JSON, environment variables, and async/await — agents lean on async heavily.",
+        links:[
+          {label:"freeCodeCamp — Python Full Course (YouTube)", url:"https://www.youtube.com/watch?v=rfscVS0vtbw"},
+          {label:"Automate the Boring Stuff", url:"https://automatetheboringstuff.com/"}
+        ]},
+      { key:"1-2", title:"Git & command line",
+        desc:"Version control, branches, commits, virtual environments, managing secrets with .env files.",
+        links:[
+          {label:"Git & GitHub Crash Course 2026 (YouTube)", url:"https://www.youtube.com/watch?v=mAFoROnOfHs"}
+        ]},
+      { key:"1-3", title:"How LLMs actually work",
+        desc:"Tokens, context windows, embeddings, sampling/temperature — conceptual grounding, no heavy math required.",
+        links:[
+          {label:"Karpathy — Intro to Large Language Models (YouTube)", url:"https://www.youtube.com/watch?v=zjkBMFhNj_g"}
+        ]},
+      { key:"1-4", title:"Prompt engineering",
+        desc:"Zero-shot vs few-shot, chain-of-thought, system prompts, and getting reliable structured (JSON) output.",
+        links:[
+          {label:"Prompt Engineering Full Course (YouTube)", url:"https://www.youtube.com/watch?v=2BpCk4d2Cc0"},
+          {label:"Anthropic — Prompt Engineering Docs", url:"https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview"}
+        ]}
+    ]},
+  { id:2, title:"LLM APIs & Tool Use", weeks:"Weeks 5–8",
+    goal:"The core unlock: how an LLM stops being a chatbot and starts taking real actions.",
+    checkpoint:"Build a CLI agent that looks up real weather data and does math by calling actual tools — not guessing.",
+    qaEdge:"This is where testing instincts pay off. Validating tool schemas and thinking through \"what happens when the LLM sends bad arguments\" is QA thinking applied directly to agents.",
+    topics:[
+      { key:"2-1", title:"Calling LLM APIs directly",
+        desc:"Request/response structure, streaming responses, handling rate limits and errors.",
+        links:[
+          {label:"Search: Anthropic Claude API Python tutorial (YouTube)", url:"https://www.youtube.com/results?search_query=anthropic+claude+api+python+tutorial"},
+          {label:"Anthropic API Docs", url:"https://docs.claude.com/en/api/overview"}
+        ]},
+      { key:"2-2", title:"Function / tool calling",
+        desc:"How an LLM decides to call a tool, defining tool schemas, and parsing results back into the conversation loop.",
+        links:[
+          {label:"Claude Tool Use Crash Course (YouTube)", url:"https://www.youtube.com/watch?v=VNB51OsiTVk"}
+        ]},
+      { key:"2-3", title:"Structured output & validation",
+        desc:"Using Pydantic to validate and type LLM outputs so downstream code doesn't break on malformed data.",
+        links:[
+          {label:"Python Pydantic — Complete Course (YouTube)", url:"https://www.youtube.com/watch?v=M81pfi64eeM"}
+        ]}
+    ]},
+  { id:3, title:"Agent Frameworks & RAG", weeks:"Weeks 9–14",
+    goal:"Learn how agents retrieve outside knowledge, and the frameworks that make building them faster.",
+    checkpoint:"Build a RAG-powered research assistant that searches a knowledge base and cites its sources.",
+    topics:[
+      { key:"3-1", title:"Retrieval-Augmented Generation (RAG)",
+        desc:"Embeddings, vector databases, chunking strategies, semantic search. Build a \"chat with your PDF\" app.",
+        links:[
+          {label:"Complete RAG Tutorial 2026 (YouTube)", url:"https://www.youtube.com/watch?v=vT-DpLvf29Q"}
+        ]},
+      { key:"3-2", title:"Agent frameworks",
+        desc:"Pick two to go deep on: LangGraph for graph-based workflows, CrewAI for multi-agent collaboration, or a native SDK.",
+        links:[
+          {label:"LangGraph Crash Course 2026 (YouTube)", url:"https://www.youtube.com/watch?v=6BojQsfa2bg"},
+          {label:"CrewAI Crash Course For Beginners (YouTube)", url:"https://www.youtube.com/watch?v=UV81LAb3x2g"}
+        ]},
+      { key:"3-3", title:"Memory & multi-agent patterns",
+        desc:"Short-term vs long-term memory, and orchestrator/worker patterns for when to use multiple agents vs one.",
+        links:[
+          {label:"Search: AI agent memory & multi-agent patterns (YouTube)", url:"https://www.youtube.com/results?search_query=ai+agent+memory+multi-agent+patterns+tutorial"}
+        ]}
+    ]},
+  { id:4, title:"Production-Grade Agents", weeks:"Weeks 15–18",
+    goal:"Move from toy demo to something you'd actually trust to ship.",
+    checkpoint:"Productionize your Phase 3 assistant: add logging, error handling, an eval suite, and deploy it with a public API.",
+    qaEdge:"Agent evaluation is essentially test automation for non-deterministic systems. This maps closely onto automation testing experience and is a genuine differentiator in interviews.",
+    topics:[
+      { key:"4-1", title:"Evaluation & observability",
+        desc:"Tracing agent decisions, and writing eval suites that check whether the agent calls the right tool and avoids hallucinating.",
+        links:[
+          {label:"Debug, Evaluate & Ship Reliable Agents with LangSmith (YouTube)", url:"https://www.youtube.com/watch?v=oSjAbx67f0k"}
+        ]},
+      { key:"4-2", title:"Guardrails & safety",
+        desc:"Input/output validation, graceful failure handling, rate limiting, and cost control.",
+        links:[
+          {label:"Search: AI agent guardrails & safety tutorial (YouTube)", url:"https://www.youtube.com/results?search_query=ai+agent+guardrails+safety+tutorial"}
+        ]},
+      { key:"4-3", title:"Deployment basics",
+        desc:"Wrapping an agent in a FastAPI backend, containerizing with Docker, and shipping to a simple cloud host.",
+        links:[
+          {label:"Deploy Models with FastAPI & Docker — Full Tutorial (YouTube)", url:"https://www.youtube.com/watch?v=x57vAQdBohQ"}
+        ]}
+    ]},
+  { id:5, title:"Portfolio & Job Readiness", weeks:"Weeks 19–24",
+    goal:"Build proof of skill and get interview-ready.",
+    topics:[
+      { key:"5-1", title:"Build 2–3 polished portfolio projects",
+        desc:"A multi-agent research/report system, a tool-using support agent with RAG, and — ideally — an \"agent QA harness\" that automatically tests other agents for reliability.",
+        links:[
+          {label:"Search: AI agent portfolio project tutorial (YouTube)", url:"https://www.youtube.com/results?search_query=ai+agent+portfolio+project+tutorial"}
+        ]},
+      { key:"5-2", title:"Document everything",
+        desc:"Clear READMEs, deployed demos, and GitHub repos people can actually run.",
+        links:[
+          {label:"Search: How to write a great GitHub README (YouTube)", url:"https://www.youtube.com/results?search_query=how+to+write+a+great+github+readme"}
+        ]},
+      { key:"5-3", title:"Interview prep",
+        desc:"RAG vs fine-tuning, agent failure modes, cost/latency tradeoffs, and when NOT to use an agent at all.",
+        links:[
+          {label:"AI Engineering Explained: LLM, RAG, Agent, Fine-Tuning (YouTube)", url:"https://www.youtube.com/watch?v=lnfWvX66FUk"}
+        ]}
+    ]}
+];
+
+/* ============ CONCEPT BANKS: each topic gets 15 term/definition pairs   ============ */
+/* ============ -> dynamically expanded into 30 quiz questions per topic ============ */
+const CONCEPTS = {
+"1-1":[
+["Variable","A named reference that stores a value in memory."],
+["Function","A reusable block of code that performs a task and can return a value."],
+["List","An ordered, mutable collection of items in Python."],
+["Dictionary","A collection of key-value pairs for fast lookups."],
+["Tuple","An ordered, immutable collection of items."],
+["Class","A blueprint for creating objects with shared attributes and methods."],
+["Exception handling","Using try/except to catch and respond to runtime errors."],
+["Module","A file containing Python code that can be imported and reused."],
+["Virtual environment","An isolated Python setup that keeps project dependencies separate."],
+["JSON","A lightweight text format used to exchange structured data between systems."],
+["API request","A call made to a remote server, often via the requests library, to send or fetch data."],
+["Async/await","Keywords that let a function pause on I/O without blocking the whole program."],
+["Environment variable","A value stored outside your code, often used for secrets like API keys."],
+["List comprehension","A concise syntax for building a list from an iterable in one line."],
+["Decorator","A function that wraps another function to add extra behavior."]
+],
+"1-2":[
+["Repository","A folder tracked by Git that stores your project's full history."],
+["Commit","A saved snapshot of changes with a descriptive message."],
+["Branch","An independent line of development that can be merged back later."],
+["Merge","Combining changes from one branch into another."],
+["Merge conflict","When Git can't automatically reconcile changes made to the same lines."],
+["git add","Stages changes so they're included in the next commit."],
+["git push","Uploads local commits to a remote repository like GitHub."],
+["git pull","Downloads and merges changes from a remote repository."],
+["Pull request","A request to merge one branch into another, usually with review."],
+[".gitignore","A file listing paths Git should not track."],
+["Clone","Making a local copy of a remote repository."],
+["Stash","Temporarily shelving uncommitted changes to switch context."],
+["Rebase","Reapplying commits on top of another base branch to keep history linear."],
+["Remote","A version of your repository hosted elsewhere, like GitHub."],
+["Working directory","The files on disk you're currently editing, before staging or committing."]
+],
+"1-3":[
+["Token","A chunk of text, a word or sub-word, that an LLM processes as a unit."],
+["Context window","The maximum amount of text an LLM can consider at once."],
+["Embedding","A numeric vector representation capturing the meaning of text."],
+["Temperature","A setting that controls how random or deterministic the output is."],
+["Pretraining","The initial phase where a model learns language patterns from massive text data."],
+["Fine-tuning","Further training a pretrained model on a smaller, specific dataset."],
+["Hallucination","When a model generates plausible-sounding but false information."],
+["Inference","The process of running a trained model to generate output."],
+["Parameter","A learned numeric weight inside the neural network."],
+["Sampling","The method used to pick the next token from probability scores."],
+["System prompt","Instructions given to the model that set its role or behavior."],
+["Attention mechanism","The part of a transformer that weighs relevance between tokens."],
+["Transformer","The neural network architecture underlying most modern LLMs."],
+["Top-p sampling","A technique that limits token choices to the most probable cumulative set."],
+["Context pollution","When irrelevant or excess information crowds out useful content in the context window."]
+],
+"1-4":[
+["Zero-shot prompting","Asking a model to complete a task with no examples given."],
+["Few-shot prompting","Providing a handful of examples in the prompt to guide the model."],
+["Chain-of-thought","Prompting the model to reason step-by-step before answering."],
+["System prompt","A persistent instruction that shapes the model's behavior across a conversation."],
+["Role prompting","Asking the model to respond as if it were a specific persona or expert."],
+["Structured output","Requesting the model return data in a fixed format like JSON."],
+["Prompt injection","An attack where malicious text tries to override the model's original instructions."],
+["Temperature tuning","Adjusting randomness to balance creativity against consistency."],
+["Delimiters","Special characters or tags used to clearly separate parts of a prompt."],
+["Iterative refinement","Improving a prompt repeatedly based on the outputs it produces."],
+["Negative prompting","Explicitly telling the model what NOT to do."],
+["Context stuffing","Overloading a prompt with unnecessary information, hurting focus."],
+["Self-consistency","Generating multiple reasoning paths and picking the most common answer."],
+["Instruction clarity","Writing prompts specific enough to leave little room for misinterpretation."],
+["Output constraints","Rules in a prompt that limit length, tone, or format of a response."]
+],
+"2-1":[
+["Endpoint","The URL an application sends requests to in order to reach an API."],
+["Request payload","The data, like messages, sent to an API in a call."],
+["Response streaming","Receiving output incrementally as it's generated, rather than all at once."],
+["Rate limit","A cap on how many requests you can make in a given time window."],
+["API key","A secret credential used to authenticate requests to a service."],
+["Latency","The time delay between sending a request and receiving a response."],
+["Status code","A number indicating whether an HTTP request succeeded or failed."],
+["Retry logic","Code that automatically re-attempts a failed request under certain conditions."],
+["Timeout","The maximum time an application waits for a response before giving up."],
+["SDK","A software development kit that simplifies calling an API from code."],
+["Max tokens","A parameter limiting how much output a model can generate."],
+["Model version","The specific identifier for which model variant handles a request."],
+["Idempotency","A property where repeating the same request produces the same result safely."],
+["Error handling","Code that gracefully manages failed or unexpected API responses."],
+["Batching","Sending multiple requests together to improve efficiency."]
+],
+"2-2":[
+["Tool schema","A structured definition describing a tool's name, purpose, and expected inputs."],
+["Tool call","A structured request from the model to run a specific function."],
+["Tool result","The output returned to the model after a tool executes."],
+["Agentic loop","The cycle of model reasoning, tool calling, and result handling repeating until done."],
+["Parallel tool use","Calling multiple tools in a single turn instead of one at a time."],
+["Client-side tool","A tool your own application code executes on the model's behalf."],
+["Server-side tool","A tool that runs on the provider's infrastructure, not your code."],
+["Input schema","The expected shape and types of arguments a tool accepts."],
+["Tool choice","A setting controlling whether or which tool the model must use."],
+["Error feedback","Returning a clear failure message to the model so it can adapt."],
+["Function signature","The defined name and parameters a callable tool exposes."],
+["Grounding","Anchoring a model's output in verified external data via tools."],
+["Tool description","The text explaining to the model what a tool does and when to use it."],
+["Multi-step tool use","Chaining several tool calls together to complete a complex task."],
+["Fallback behavior","What an agent does when a tool call fails or is unavailable."]
+],
+"2-3":[
+["Pydantic model","A Python class that defines and validates a data structure."],
+["Type hint","An annotation specifying what type a variable or field should be."],
+["Schema validation","Checking that data matches an expected structure before using it."],
+["Coercion","Automatically converting a value to the expected type."],
+["Nested model","A Pydantic model containing another model as a field."],
+["Validation error","An exception raised when data doesn't match a defined schema."],
+["JSON mode","An LLM setting that forces output into valid JSON."],
+["Default value","A fallback value used when a field isn't provided."],
+["Required field","A field that must be present for validation to pass."],
+["Custom validator","A user-defined function that enforces extra rules on a field."],
+["Serialization","Converting a Python object into a transmittable format like JSON."],
+["Deserialization","Converting incoming data, like JSON, into a Python object."],
+["Enum field","A field restricted to a fixed set of allowed values."],
+["Strict mode","A validation setting that disallows implicit type coercion."],
+["Downstream breakage","Errors caused later in a pipeline by unvalidated, malformed data."]
+],
+"3-1":[
+["Retriever","The component that searches a knowledge base for relevant information."],
+["Vector database","A database optimized for storing and searching embeddings."],
+["Chunking","Splitting documents into smaller pieces for indexing and retrieval."],
+["Semantic search","Finding results based on meaning rather than exact keyword match."],
+["Similarity score","A number indicating how closely two embeddings match."],
+["Reranking","Reordering retrieved results to prioritize the most relevant ones."],
+["Grounded response","An answer supported by retrieved, verifiable source content."],
+["Index","The searchable structure built from embedded document chunks."],
+["Query embedding","The vector representation of a user's search query."],
+["Top-k retrieval","Fetching the k most relevant chunks for a given query."],
+["Hybrid search","Combining keyword and semantic search for better results."],
+["Context injection","Inserting retrieved text into the prompt sent to the LLM."],
+["Source citation","Referencing where retrieved information came from in the answer."],
+["Stale knowledge","Outdated information a model relies on without RAG."],
+["Embedding model","The model used to convert text into vector representations."]
+],
+"3-2":[
+["LangGraph","A framework for building agents as stateful graphs of nodes and edges."],
+["CrewAI","A framework for orchestrating teams of role-based collaborating agents."],
+["Node","A single step or function in a graph-based agent workflow."],
+["Edge","A connection defining what step runs next in a graph."],
+["State","The shared data structure that persists and updates across an agent's steps."],
+["Agent role","A defined persona, goal, and skill set assigned to an agent."],
+["Crew","A group of agents working together toward a shared goal in CrewAI."],
+["ReAct pattern","An agent loop that alternates between reasoning and acting."],
+["Supervisor agent","An agent that coordinates and delegates to other agents."],
+["Conditional routing","Directing workflow execution differently based on runtime conditions."],
+["Checkpointing","Saving an agent's state so execution can resume later."],
+["Human-in-the-loop","A workflow step where a person reviews or approves agent actions."],
+["Task decomposition","Breaking a complex goal into smaller, delegable sub-tasks."],
+["Agent SDK","A vendor-provided toolkit for building agents on top of a specific model."],
+["Workflow orchestration","Coordinating the order and logic of multi-step agent processes."]
+],
+"3-3":[
+["Short-term memory","Information held only within the current conversation or session."],
+["Long-term memory","Persistent information stored and retrieved across sessions."],
+["Episodic memory","A record of past specific interactions an agent can recall."],
+["Semantic memory","A stored knowledge base of general facts an agent can draw on."],
+["Orchestrator","An agent that breaks down and assigns work to other agents."],
+["Worker agent","A specialized agent that executes a specific delegated sub-task."],
+["Shared state","Data visible to multiple agents collaborating on the same task."],
+["Message passing","How agents communicate results and requests to one another."],
+["Hierarchical agents","A multi-agent structure with clear levels of delegation."],
+["Peer-to-peer agents","Agents that coordinate as equals without a central controller."],
+["Memory retrieval","Pulling relevant past information back into an agent's context."],
+["Context window limit","The constraint that forces older memory out of active context."],
+["Deadlock","A stuck state where agents wait on each other indefinitely."],
+["Turn-taking","A coordination pattern where agents act one at a time in sequence."],
+["Consensus","Agents agreeing on a shared conclusion before proceeding."]
+],
+"4-1":[
+["Trace","A recorded, step-by-step log of everything an agent did during a run."],
+["Eval suite","A set of tests that check an agent's behavior against expected outcomes."],
+["LLM-as-judge","Using a model to automatically grade another model's output."],
+["Regression","A drop in quality after a change, caught by comparing to a baseline."],
+["Golden dataset","A curated set of example inputs and outputs used to measure quality."],
+["Latency monitoring","Tracking how long agent operations take in production."],
+["Failure mode","A specific, recurring way an agent goes wrong."],
+["Online evaluation","Scoring live production traffic in real time."],
+["Offline evaluation","Testing an agent against a fixed dataset before deployment."],
+["Hallucination detection","Automated checks for confidently stated but false claims."],
+["Annotation queue","A workflow where humans review and label agent outputs."],
+["Dashboard","A visual summary of agent performance metrics over time."],
+["Drift","Gradual degradation in output quality or relevance over time."],
+["Span","A single traced operation, like one LLM call, within a larger trace."],
+["Root cause analysis","Diagnosing exactly which step in a pipeline caused a failure."]
+],
+"4-2":[
+["Input validation","Checking incoming data before it reaches the model or a tool."],
+["Output filtering","Screening a model's response before it reaches the end user."],
+["Rate limiting","Restricting how often an action or API can be called."],
+["Cost control","Mechanisms that cap or monitor spending on model and API usage."],
+["Sandboxing","Running risky code or actions in an isolated, restricted environment."],
+["Allowlist","A list of explicitly permitted actions, tools, or values."],
+["Denylist","A list of explicitly forbidden actions, tools, or values."],
+["Fallback response","A safe default reply used when something goes wrong."],
+["Human approval step","A checkpoint requiring a person to confirm a risky action."],
+["PII redaction","Automatically removing personally identifiable information from data."],
+["Prompt injection defense","Techniques to stop malicious hidden instructions from hijacking a model."],
+["Escalation path","A defined route for handing off a problem the agent can't resolve."],
+["Circuit breaker","A safeguard that halts a failing process before it causes more damage."],
+["Confidence threshold","A minimum certainty score required before an agent acts autonomously."],
+["Audit log","A permanent record of actions taken, kept for accountability."]
+],
+"4-3":[
+["FastAPI","A Python web framework commonly used to expose agents as APIs."],
+["Endpoint","A specific URL path that a deployed service responds to."],
+["Docker image","A packaged snapshot of an application and everything it needs to run."],
+["Container","A running instance of a Docker image, isolated from the host system."],
+["Dockerfile","A script of instructions used to build a Docker image."],
+["Environment variable","A configuration value injected at runtime rather than hardcoded."],
+["Load balancer","A component that distributes incoming traffic across multiple servers."],
+["Horizontal scaling","Adding more instances of a service to handle increased load."],
+["Health check","An automated request that verifies a service is running correctly."],
+["CI/CD pipeline","Automated steps that test and deploy code changes."],
+["Uvicorn","An ASGI server commonly used to run FastAPI applications."],
+["Reverse proxy","A server that forwards client requests to backend services."],
+["Rollback","Reverting a deployment to a previous, working version after a failure."],
+["Secrets management","Securely storing and accessing credentials in production."],
+["Uptime","The percentage of time a service is available and functioning."]
+],
+"5-1":[
+["README","A file explaining what a project does and how to run it."],
+["Demo deployment","A live, hosted version of a project others can try out."],
+["Multi-agent system","A project where several specialized agents collaborate on a task."],
+["Tool-using agent","An agent project that calls external APIs or functions to act."],
+["Agent QA harness","A tool that automatically tests other agents for reliability."],
+["Reproducibility","The ability for someone else to run your project and get the same results."],
+["Scope creep","Letting a portfolio project grow uncontrollably beyond its original goal."],
+["MVP","The smallest version of a project that still proves the concept."],
+["Tech stack","The specific tools, languages, and frameworks used to build a project."],
+["Use case","The specific real-world problem a project is designed to solve."],
+["Live demo link","A URL where a reviewer can interact with your deployed project."],
+["Code walkthrough","An explanation of how a project's code is structured and why."],
+["Edge case handling","Demonstrating how a project behaves under unusual or extreme inputs."],
+["Version control history","A commit log showing how a project evolved over time."],
+["Project polish","The finishing touches, docs, UI, error handling, that make a project presentable."]
+],
+"5-2":[
+["README","A file explaining what a project does and how to set it up."],
+["Setup instructions","Step-by-step guidance for getting a project running locally."],
+["Architecture diagram","A visual showing how a system's components fit together."],
+["Usage example","A sample showing how to actually use a tool or project."],
+["License file","A document specifying how others may use or reuse your code."],
+["Changelog","A running record of what changed between project versions."],
+["API reference","Documentation describing available endpoints, inputs, and outputs."],
+["Contribution guide","Instructions for how others can contribute to a project."],
+["Inline comments","Short notes in code explaining non-obvious logic."],
+["Docstring","A structured comment describing what a function or class does."],
+["Known limitations","A documented list of what a project can't yet do."],
+["Demo video","A short recording showing a project in action."],
+["Environment requirements","The dependencies and versions needed to run a project."],
+["Badge","A small status icon in a README showing build status or license."],
+["Table of contents","A navigable outline at the top of long documentation."]
+],
+"5-3":[
+["RAG vs fine-tuning","Choosing between retrieving external knowledge or retraining the model itself."],
+["Failure mode analysis","Explaining specific ways an agent can go wrong and why."],
+["Cost/latency tradeoff","Balancing response speed against compute or API expense."],
+["When not to use an agent","Recognizing simple, deterministic tasks that don't need one."],
+["System design question","An interview question asking you to architect a full solution."],
+["Behavioral question","An interview question about how you've handled past situations."],
+["Take-home project","A practical assignment completed outside the live interview."],
+["Whiteboard reasoning","Explaining your thought process out loud while solving a problem."],
+["Tradeoff articulation","Clearly explaining the pros and cons of a technical decision."],
+["Portfolio walkthrough","Presenting and explaining your own past projects to an interviewer."],
+["Ambiguity handling","Demonstrating how you clarify or proceed with vague requirements."],
+["Post-mortem","A structured review of what went wrong after an incident."],
+["Scalability question","An interview question about handling growth in users or data."],
+["STAR method","A structured way, Situation Task Action Result, to answer behavioral questions."],
+["Negotiation","Discussing compensation or role expectations after an offer."]
+]
+};
+
+/* ============ helpers ============ */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+/* Build 30 dynamic questions (15 MCQ + 15 True/False) from a topic's concept bank */
+function buildQuiz(topicKey){
+  const bank = CONCEPTS[topicKey];
+  const questions = [];
+  bank.forEach((c) => {
+    const [term, def] = c;
+    const pool = shuffle(bank.filter(x => x[0] !== term)).slice(0,3).map(x => x[0]);
+    const options = shuffle([term, ...pool]);
+    questions.push({ type:"mcq", prompt: "Which concept best matches this definition: \u201c" + def + "\u201d", options, answer: term });
+  });
+  bank.forEach((c, i) => {
+    const [term, def] = c;
+    const useTrue = (i % 2 === 0);
+    let shownDef = def;
+    if(!useTrue){
+      const others = bank.filter(x => x[0] !== term);
+      shownDef = shuffle(others)[0][1];
+    }
+    questions.push({ type:"tf", prompt: "True or False: \u201c" + term + "\u201d means \u2014 " + shownDef, answer: useTrue });
+  });
+  return shuffle(questions);
+}
+
+/* ============ persistent storage ============ */
+/* Uses Claude's window.storage when available (e.g. previewed inside Claude).
+   Falls back to the browser's own localStorage when hosted as a real website
+   (e.g. GitHub Pages) — each visitor's progress is saved in their own browser. */
+const STORAGE_KEY = "agentic-roadmap-progress-v1";
+const hasClaudeStorage = (typeof window.storage !== "undefined");
+
+async function saveState(){
+  try{
+    const state = { checked:{}, status:{} };
+    document.querySelectorAll('input[type="checkbox"][data-topic]').forEach(cb => {
+      state.checked[cb.dataset.topic] = cb.checked;
+    });
+    document.querySelectorAll('[data-status-group]').forEach(group => {
+      const active = group.querySelector('.status-btn[data-active="true"]');
+      state.status[group.dataset.statusGroup] = active ? active.dataset.val : 'not-started';
+    });
+    if(hasClaudeStorage){
+      await window.storage.set(STORAGE_KEY, JSON.stringify(state), false);
+    } else if(typeof localStorage !== "undefined"){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+  }catch(err){
+    console.error('Progress save failed:', err);
+  }
+}
+
+async function loadState(){
+  try{
+    if(hasClaudeStorage){
+      const result = await window.storage.get(STORAGE_KEY, false);
+      return result ? JSON.parse(result.value) : null;
+    } else if(typeof localStorage !== "undefined"){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    }
+    return null;
+  }catch(err){
+    return null;
+  }
+}
+
+/* ============ render ============ */
+const navEl = document.getElementById('navRail');
+const trackEl = document.getElementById('track');
+let navHtml = "";
+let trackHtml = "";
+
+DATA.forEach(phase => {
+  const num = String(phase.id).padStart(2,'0');
+  navHtml += `<a href="#phase-${num}">${num} \u00b7 ${esc(phase.title)}</a>`;
+
+  let topicsHtml = "";
+  phase.topics.forEach(topic => {
+    const linksHtml = topic.links.map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join("");
+    topicsHtml += `
+      <div class="topic" data-topic-card="${topic.key}">
+        <label class="check-label">
+          <input type="checkbox" data-topic="${topic.key}">
+          <span style="display:flex; width:100%; align-items:center;">
+            <span class="topic-title">${esc(topic.title)}</span>
+            <span class="topic-badge" data-topic-badge="${topic.key}">not started</span>
+          </span>
+        </label>
+        <p class="topic-desc">${esc(topic.desc)}</p>
+        <div class="resources">${linksHtml}</div>
+        <div class="quiz" data-quiz-wrap="${topic.key}">
+          <div class="quiz-head"><span class="label">Quiz &middot; ${esc(topic.title)}</span><span class="mono" style="font-size:10.5px; color:var(--muted);">30 questions</span></div>
+          <div class="quiz-locked" data-locked="${topic.key}">
+            <div class="lock-icon">\uD83D\uDD12</div>
+            <p>Locked until this topic is checked off above.</p>
+          </div>
+          <div class="quiz-body" data-unlocked="${topic.key}" style="display:none;"></div>
+        </div>
+      </div>`;
+  });
+
+  const qaEdgeHtml = phase.qaEdge ? `<div class="qa-edge"><b>QA EDGE</b> \u2014 ${esc(phase.qaEdge)}</div>` : "";
+  const checkpointHtml = phase.checkpoint ? `
+      <div class="checkpoint">
+        <span class="label">Checkpoint Project</span>
+        <p>${esc(phase.checkpoint)}</p>
+      </div>` : "";
+
+  trackHtml += `
+    <section class="phase" id="phase-${num}" data-phase="${phase.id}">
+      <div class="phase-node" id="node-${phase.id}">${num}</div>
+      <div class="phase-head">
+        <h2>${esc(phase.title)}</h2>
+        <span class="weeks-tag">${esc(phase.weeks)}</span>
+      </div>
+      <p class="phase-goal">${esc(phase.goal)}</p>
+      <div class="status-row" data-status-group="${phase.id}">
+        <button class="status-btn" data-val="not-started">NOT STARTED</button>
+        <button class="status-btn" data-val="in-progress">IN PROGRESS</button>
+        <button class="status-btn" data-val="done">DONE</button>
+      </div>
+      <div class="topic-list">${topicsHtml}</div>
+      ${qaEdgeHtml}
+      ${checkpointHtml}
+    </section>`;
+});
+
+navEl.innerHTML = navHtml;
+trackEl.innerHTML = trackHtml;
+
+/* ============ topic checkbox -> unlock quiz + overall counter ============ */
+const allCheckboxes = document.querySelectorAll('input[type="checkbox"][data-topic]');
+document.getElementById('totalCount').textContent = allCheckboxes.length;
+
+function renderQuizInto(container, topicKey){
+  if(container.dataset.built === "1") return;
+  container.dataset.built = "1";
+  const questions = buildQuiz(topicKey);
+  let html = `<form data-quiz-form="${topicKey}">`;
+  questions.forEach((q, idx) => {
+    const name = topicKey + "-q" + idx;
+    html += `<div class="q-block"><div class="q-text">${idx+1}. ${esc(q.prompt)}</div><div class="q-options">`;
+    if(q.type === "mcq"){
+      q.options.forEach((opt) => {
+        const isCorrect = (opt === q.answer) ? "data-correct=\"1\"" : "";
+        html += `<label class="q-option" ${isCorrect}><input type="radio" name="${name}" value="${esc(opt)}">${esc(opt)}</label>`;
+      });
+    } else {
+      html += `<label class="q-option" data-correct="${q.answer ? "1":"0"}"><input type="radio" name="${name}" value="true">True</label>`;
+      html += `<label class="q-option" data-correct="${!q.answer ? "1":"0"}"><input type="radio" name="${name}" value="false">False</label>`;
+    }
+    html += `</div></div>`;
+  });
+  html += `<button type="submit" class="quiz-submit">Submit Quiz</button><button type="button" class="quiz-retake" data-retake="${topicKey}">Shuffle &amp; Retake</button><div class="quiz-result"></div></form>`;
+  container.innerHTML = html;
+
+  container.querySelector('[data-quiz-form]').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const blocks = form.querySelectorAll('.q-block');
+    let score = 0;
+    blocks.forEach(block => {
+      const options = block.querySelectorAll('.q-option');
+      const checked = block.querySelector('input:checked');
+      options.forEach(opt => {
+        opt.classList.remove('correct','incorrect');
+        const isCorrectOpt = opt.dataset.correct === "1";
+        const input = opt.querySelector('input');
+        if(isCorrectOpt) opt.classList.add('correct');
+        else if(checked && input === checked) opt.classList.add('incorrect');
+      });
+      if(checked && checked.closest('.q-option').dataset.correct === "1") score++;
+    });
+    const resultEl = form.querySelector('.quiz-result');
+    resultEl.style.display = 'block';
+    resultEl.textContent = 'Score: ' + score + '/' + blocks.length + (score === blocks.length ? '  \u2014 perfect score.' : '  \u2014 review the highlighted answers above.');
+  });
+
+  container.querySelector('[data-retake]').addEventListener('click', () => {
+    container.dataset.built = "0";
+    renderQuizInto(container, topicKey);
+  });
+}
+
+function refreshTopic(topicKey){
+  const checkbox = document.querySelector('input[type="checkbox"][data-topic="'+topicKey+'"]');
+  const lockedEl = document.querySelector('[data-locked="'+topicKey+'"]');
+  const unlockedEl = document.querySelector('[data-unlocked="'+topicKey+'"]');
+  const badge = document.querySelector('[data-topic-badge="'+topicKey+'"]');
+  if(checkbox.checked){
+    lockedEl.style.display = 'none';
+    unlockedEl.style.display = 'block';
+    badge.textContent = 'done';
+    badge.classList.add('done');
+    renderQuizInto(unlockedEl, topicKey);
+  } else {
+    lockedEl.style.display = 'block';
+    unlockedEl.style.display = 'none';
+    badge.textContent = 'not started';
+    badge.classList.remove('done');
+  }
+}
+
+function updateOverallCount(){
+  const done = document.querySelectorAll('input[type="checkbox"][data-topic]:checked').length;
+  document.getElementById('doneCount').textContent = done;
+}
+
+allCheckboxes.forEach(box => {
+  box.addEventListener('change', () => { refreshTopic(box.dataset.topic); updateOverallCount(); saveState(); });
+  refreshTopic(box.dataset.topic);
+});
+updateOverallCount();
+
+/* ============ phase status buttons ============ */
+document.querySelectorAll('[data-status-group]').forEach(group => {
+  const phase = group.dataset.statusGroup;
+  const node = document.getElementById('node-' + phase);
+  const buttons = group.querySelectorAll('.status-btn');
+  buttons.forEach(b => b.dataset.active = (b.dataset.val === 'not-started') ? 'true' : 'false');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.dataset.active = 'false');
+      btn.dataset.active = 'true';
+      node.classList.remove('status-progress', 'status-done');
+      if(btn.dataset.val === 'in-progress') node.classList.add('status-progress');
+      if(btn.dataset.val === 'done') node.classList.add('status-done');
+      saveState();
+    });
+  });
+});
+
+/* ============ subtle 3D tilt on topic cards ============ */
+document.querySelectorAll('.topic').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = 'translateY(-3px) rotateX(' + (-y*3) + 'deg) rotateY(' + (x*3) + 'deg)';
+  });
+  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+});
+
+/* ============ restore saved progress on load ============ */
+(async function initFromStorage(){
+  const saved = await loadState();
+  const badgeEl = document.querySelector('.progress-badge');
+  if(badgeEl){
+    badgeEl.title = hasClaudeStorage
+      ? "Progress auto-saves to your Claude account."
+      : "Progress auto-saves in this browser (each visitor's progress is their own).";
+  }
+  if(!saved) return;
+  if(saved.checked){
+    Object.keys(saved.checked).forEach(key => {
+      if(!saved.checked[key]) return;
+      const cb = document.querySelector('input[type="checkbox"][data-topic="'+key+'"]');
+      if(cb){ cb.checked = true; refreshTopic(key); }
+    });
+    updateOverallCount();
+  }
+  if(saved.status){
+    Object.keys(saved.status).forEach(phaseId => {
+      const group = document.querySelector('[data-status-group="'+phaseId+'"]');
+      if(!group) return;
+      const val = saved.status[phaseId];
+      const buttons = group.querySelectorAll('.status-btn');
+      const targetBtn = group.querySelector('.status-btn[data-val="'+val+'"]');
+      if(!targetBtn) return;
+      buttons.forEach(b => b.dataset.active = 'false');
+      targetBtn.dataset.active = 'true';
+      const node = document.getElementById('node-' + phaseId);
+      node.classList.remove('status-progress', 'status-done');
+      if(val === 'in-progress') node.classList.add('status-progress');
+      if(val === 'done') node.classList.add('status-done');
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
